@@ -2,38 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { signinFields } from "@/constants/authFields";
 import { formSchema } from "@/schema/auth.schema";
+import { signinService } from "@/services/auth.services";
 import FormInput from "@/shared/FormInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const signinFields = [
-  {
-    name: "username",
-    label: "Email address or username",
-    placeholder: "Email address or username",
-    type: "string",
-  },
-  {
-    name: "password",
-    label: "Password",
-    placeholder: "Password",
-    type: "password",
-  },
-];
-
 const Signin = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      emailOrUsername: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("🚀 ~ onSubmit ~ values:", values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    await signinService(values);
   };
 
   return (
